@@ -23,7 +23,7 @@
 bool removeWhiteBackground(const std::string& inputPath, const std::string& outputPath) {
     int width, height, channels;
     
-    // Load the image (force RGBA output for transparency support)
+    // Load the image, preserving original channels
     unsigned char* imageData = stbi_load(inputPath.c_str(), &width, &height, &channels, 0);
     
     if (!imageData) {
@@ -67,7 +67,8 @@ bool removeWhiteBackground(const std::string& inputPath, const std::string& outp
             uint8_t alpha = 255 - grayValue;
             
             // Set output pixel to black with calculated alpha
-            // This preserves the silhouette while making white transparent
+            // For black and white silhouette images, the output is a black shape
+            // with varying transparency based on the original grayscale values
             outputData[dstIndex] = 0;       // R - black
             outputData[dstIndex + 1] = 0;   // G - black
             outputData[dstIndex + 2] = 0;   // B - black
